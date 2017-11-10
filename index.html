@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css 实现圆环测试Demo</title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #a7a7a7;
+      }
+
+      #seconds {
+        width: 160px;
+        height: 160px;
+        margin: 220px auto 0;
+        position: relative;
+        background-color: #fff;
+      }
+
+      #sNum {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: 160px;
+        color: #ff6700;
+        font-size: 24px;
+      }
+
+      #maskLeft {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        width: 80px;
+        height: 160px;
+        background-color: #fff;
+      }
+
+      #leftBox, #rightBox {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 160px;
+        height: 160px;
+      }
+
+      #rightBox {
+        z-index: 2;
+      }
+
+      #left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80px;
+        height: 160px;
+        background: url('http://oqpmmru7y.bkt.clouddn.com/circle.png') left center no-repeat;
+        transform-origin: right center;
+        transform: rotate(0deg);
+      }
+
+      #right {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 80px;
+        height: 160px;
+        background: url('http://oqpmmru7y.bkt.clouddn.com/circle.png') right center no-repeat;
+        transform-origin: left center;
+        transform: rotate(0deg);
+      }
+    </style>
+</head>
+<body>
+  <div id="seconds">
+    <p id="sNum"></p>
+    <div id="maskLeft"></div>
+    <div id="leftBox">
+      <div id="left"></div>
+    </div>
+    <div id="rightBox">
+      <div id="right"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    (function(){
+      var $ = function(id){
+        return document.getElementById(id);
+      };
+      var domObj = {
+        seconds: $('seconds'),
+        left: $('left'),
+        right: $('right'),
+        sNum: $('sNum')
+      };
+
+      var c = {
+        angleToDeg: function(s){
+          if(s === 0){
+            s = 0;
+          } else {
+            s = (Number(s) + 1);
+          }
+          var deg = parseInt((360 / 60) * s, 10);
+          console.log(s);
+          console.log(deg);
+          return deg;
+        },
+        getSeconds: function(){
+          var times = new Date();
+          var sec = times.getSeconds();
+          var deg = c.angleToDeg( sec );
+          domObj.sNum.textContent = sec;
+          if(deg <= 180){
+            domObj.right.style.display = 'none';
+            domObj.right.style.WebkitTransform = domObj.right.style.transform = 'rotate(0deg)';
+            domObj.left.style.WebkitTransform = domObj.left.style.transform = 'rotate('+ deg +'deg)';
+          } else {
+            domObj.right.style.display = 'block';
+            domObj.left.style.WebkitTransform = domObj.left.style.transform = 'rotate(180deg)';
+            domObj.right.style.WebkitTransform = domObj.right.style.transform = 'rotate('+ (deg - 180) +'deg)';
+          }
+        }
+      };
+
+      // 跑起来
+      var timer = setInterval(function(){
+        c.getSeconds();
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
